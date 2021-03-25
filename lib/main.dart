@@ -1,13 +1,15 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hexagon/hexagon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
+import 'package:fit_kit/fit_kit.dart';
 
 void main() {
   runApp(Kolubra());
 }
-
 class Kolubra extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -16,7 +18,6 @@ class Kolubra extends StatelessWidget {
       DeviceOrientation.landscapeLeft,
       DeviceOrientation.landscapeRight,
     ]);
-
     return MaterialApp(
       title: 'Kolubra',
       theme: ThemeData(
@@ -36,6 +37,40 @@ class Kolubra extends StatelessWidget {
   }
 }
 
+class FitKitReader {
+  static String result = "";
+  static Map<DataType, List<FitData>> results = Map();
+  static bool permissions;
+  static Future<void> read() async {
+    results.clear();
+
+    try {
+      permissions = await FitKit.requestPermissions(DataType.values);
+      if (!permissions) {
+        result = 'requestPermissions: failed';
+      } else {
+        for (DataType type in DataType.values) {
+          try {
+            results[type] = await FitKit.read(
+              type,
+              dateFrom: DateTime.now().subtract(Duration(days: 5)),
+              dateTo: DateTime.now(),
+            );
+          } on UnsupportedException catch (e) {
+            print("you fool");
+            print(e);
+            results[e.dataType] = [];
+          }
+        }
+
+        result = 'readAll: success';
+      }
+    } catch (e) {
+      result = 'readAll: $e';
+    }
+    print(result);
+  }
+}
 class Home extends StatefulWidget {
   Home({Key key, this.title}) : super(key: key);
 
@@ -64,30 +99,42 @@ class HomeState extends State<Home> {
           fit: BoxFit.fill,
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        body: ListView(
-          children: <Widget>[],
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) => _buildPopupDialog(context),
-            );
-          },
-          // child: HexagonWidget.flat(
-          //   width: 5,
-          //   color: Colors.limeAccent,
-          //   padding: 4.0,
-          //   child: Icon(exclamationmark, color: Colors.black),
-          // ),
-          child: Icon(CupertinoIcons.exclamationmark,
-              color: Colors.black, size: 25),
-          backgroundColor: Colors.limeAccent[400],
-        ),
-      ),
-    );
+        child: Stack(
+          children: <Widget>[
+            Align(
+              alignment: Alignment.bottomLeft,
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) => _buildPopupDialog(context),
+                  );
+                },
+                // child: HexagonWidget.flat(
+                //   width: 5,
+                //   color: Colors.limeAccent,
+                //   padding: 4.0,
+                //   child: Icon(exclamationmark, color: Colors.black),
+                // ),
+                child: Icon(CupertinoIcons.exclamationmark,
+                    color: Colors.black, size: 25),
+                backgroundColor: Colors.limeAccent[400]
+              ),
+            ),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: () {
+                  FitKitReader.read();
+                  print(FitKitReader.result);
+                },
+              ),
+            ),
+          ],
+        )
+      );
   }
 
   Widget _buildPopupDialog(BuildContext context) {
