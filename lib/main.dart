@@ -7,9 +7,21 @@ import 'package:flutter/cupertino.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:fit_kit/fit_kit.dart';
 
+import 'Creature.dart';
+
+List<Creature> allCreatures = List();
+
+void init() { //such a hassle is there a way to automate this
+  Creature Jimmy = new Creature("Jimmy");
+  Jimmy.addStage("assets/JimmyAssets/jimmy1.png", 0);
+  Jimmy.addStage("assets/JimmyAssets/jimmy2.png", 50);
+  allCreatures.add(Jimmy);
+}
 void main() {
+  init();
   runApp(Kolubra());
 }
+
 class Kolubra extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -91,6 +103,7 @@ class Home extends StatefulWidget {
 
 
 class HomeState extends State<Home> {
+  String currentForm = allCreatures[0].getImageByEnergy();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -133,6 +146,23 @@ class HomeState extends State<Home> {
                 },
               ),
             ),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: FloatingActionButton(
+                heroTag: null,
+                onPressed: () {
+                  allCreatures[0].getEnergy(5);
+                  print(allCreatures[0].energy);
+                  currentForm = allCreatures[0].getImageByEnergy();
+                  print(currentForm);
+                  setState(() {}); // is there a less dumb way to do make sure it refreshes??
+                },
+              ),
+            ),
+            Container(
+              alignment: Alignment.center,
+              child: Image.asset(currentForm, width: 100),
+            )
           ],
         )
       );
