@@ -103,7 +103,34 @@ class Home extends StatefulWidget {
 
 
 class HomeState extends State<Home> {
-  String currentForm = allCreatures[0].getImageByEnergy();
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+    switch(index) {
+      case 0:
+        showDialog(
+          context: context,
+          builder: (BuildContext context) => _buildPopupDialog(context),
+        );
+        break;
+      case 1:
+        allCreatures[0].getEnergy(5);
+        print(allCreatures[0].energy);
+        currentForm = allCreatures[0].getImageByEnergy();
+        print(currentForm);
+        setState(() {}); // is there a less dumb way to do make sure it refreshes??
+        break;
+      case 2:
+        FitKitReader.read();
+        print(FitKitReader.result);
+        break;
+      default:
+        break;
+    }
+  }
+String currentForm = allCreatures[0].getImageByEnergy();
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -113,59 +140,40 @@ class HomeState extends State<Home> {
           fit: BoxFit.fill,
         ),
       ),
-        child: Stack(
-          children: <Widget>[
-            Align(
-              alignment: Alignment.bottomLeft,
-              child: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  showDialog(
-                    context: context,
-                    builder: (BuildContext context) => _buildPopupDialog(context),
-                  );
-                },
-                // child: HexagonWidget.flat(
-                //   width: 5,
-                //   color: Colors.limeAccent,
-                //   padding: 4.0,
-                //   child: Icon(exclamationmark, color: Colors.black),
-                // ),
-                child: Icon(CupertinoIcons.exclamationmark,
-                    color: Colors.black, size: 25),
-                backgroundColor: Colors.limeAccent[400]
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            alignment: Alignment.center,
+            child: Image.asset(currentForm, width: 100),
+          ),
+          bottomNavigationBar: BottomNavigationBar(
+            items: const <BottomNavigationBarItem>[
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.home),
+                  title: Text('options'),
+                  backgroundColor: Colors.green
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomRight,
-              child: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  FitKitReader.read();
-                  print(FitKitReader.result);
-                },
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.search),
+                  title: Text('add energy to jimmy'),
+                  backgroundColor: Colors.yellow
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: FloatingActionButton(
-                heroTag: null,
-                onPressed: () {
-                  allCreatures[0].getEnergy(5);
-                  print(allCreatures[0].energy);
-                  currentForm = allCreatures[0].getImageByEnergy();
-                  print(currentForm);
-                  setState(() {}); // is there a less dumb way to do make sure it refreshes??
-                },
+              BottomNavigationBarItem(
+                icon: Icon(Icons.person),
+                title: Text('get fitness'),
+                backgroundColor: Colors.blue,
               ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              child: Image.asset(currentForm, width: 100),
-            )
-          ],
-        )
-      );
+            ],
+            type: BottomNavigationBarType.shifting,
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.black,
+            iconSize: 40,
+            onTap: _onItemTapped,
+            elevation: 5
+        ),
+      ),
+
+    );
   }
 
   Widget _buildPopupDialog(BuildContext context) {
@@ -214,13 +222,6 @@ class HomeState extends State<Home> {
               ),
             ],
           ),
-          // Container(
-          //   child: SizedBox(
-          //     height: 100,
-          //     width: 100,
-          //   ),
-          //   color: Colors.lime[100],
-          // )
         ],
       ),
     );
