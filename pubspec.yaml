@@ -55,6 +55,10 @@ flutter:
     - assets/clubpenguinmap.png
     - assets/JimmyAssets/jimmy1.png
     - assets/JimmyAssets/jimmy2.png
+    - assets/ExerciseIcons/jumprope.png
+    - assets/ExerciseIcons/running.png
+    - assets/ExerciseIcons/running2.png
+    - assets/ExerciseIcons/timer.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 

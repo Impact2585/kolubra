@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,17 +8,26 @@ import 'package:hexagon/hexagon.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:fit_kit/fit_kit.dart';
+import 'package:kolubra/AchievementTracker.dart';
 
+import 'Achievement.dart';
 import 'Creature.dart';
 
 List<Creature> allCreatures = List();
+AchievementTracker _achievementTracker = AchievementTracker();
 
-void init() {
+Future<void> init() async {
   //such a hassle is there a way to automate this
   Creature Jimmy = new Creature("Jimmy");
   Jimmy.addStage("assets/JimmyAssets/jimmy1.png", 0);
   Jimmy.addStage("assets/JimmyAssets/jimmy2.png", 50);
   allCreatures.add(Jimmy);
+  print("AOK0");
+  _achievementTracker.addAchievement(new Achievement("Walk 250 steps every hour", 100, 0, 100, 1, "assets/ExerciseIcons/running.png"));
+  _achievementTracker.addAchievement(new Achievement("Jog for 10 minutes", 300, 0, 100, 1, "assets/ExerciseIcons/timer.png"));
+  _achievementTracker.addAchievement(new Achievement("Run for 10 minutes everyday this week", 500, 0, 100, 1, "assets/ExerciseIcons/running2.png"));
+  _achievementTracker.addAchievement(new Achievement("Jumprope for 5 minutes", 150, 0, 100, 1, "assets/ExerciseIcons/jumprope.png"));
+  print("AOK2");
 }
 
 void main() {
@@ -349,13 +360,16 @@ class HomeState extends State<Home> {
               Container(
                   color: Colors.green[200],
                   padding: EdgeInsets.all(10),
-                  child: RichText(
-                    text: TextSpan(
-                      text: 'Quests',
-                      style: TextStyle(color: Colors.black),
-                    ),
-                    textScaleFactor: 1.5,
-                  )),
+                  child: TextButton(
+                    child: Text('Quests'),
+                    onPressed: () {
+                      print(_achievementTracker.list.length);
+                          _achievementTracker.list[0].addProg(50);
+                          Navigator.push(context, new MaterialPageRoute(builder: (context) => _achievementTracker));
+                      setState(() {});
+                    },
+                  ),
+                ),
               SizedBox(width: 10),
               Container(
                 color: Colors.lime[300],
