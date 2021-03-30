@@ -22,12 +22,37 @@ Future<void> init() async {
   Jimmy.addStage("assets/JimmyAssets/jimmy1.png", 0);
   Jimmy.addStage("assets/JimmyAssets/jimmy2.png", 50);
   allCreatures.add(Jimmy);
-  print("AOK0");
-  _achievementTracker.addAchievement(new Achievement("Walk 250 steps every hour", 100, 0, 100, 1, "assets/ExerciseIcons/running.png"));
-  _achievementTracker.addAchievement(new Achievement("Jog for 10 minutes", 300, 0, 100, 1, "assets/ExerciseIcons/timer.png"));
-  _achievementTracker.addAchievement(new Achievement("Run for 10 minutes everyday this week", 500, 0, 100, 1, "assets/ExerciseIcons/running2.png"));
-  _achievementTracker.addAchievement(new Achievement("Jumprope for 5 minutes", 150, 0, 100, 1, "assets/ExerciseIcons/jumprope.png"));
-  print("AOK2");
+  _achievementTracker.addAchievement(new Achievement(
+      "Walk 250 steps every hour",
+      100,
+      50,
+      100,
+      1,
+      "assets/ExerciseIcons/running.png",
+      '(Daily)'));
+  _achievementTracker.addAchievement(new Achievement("Jog for 10 minutes", 300,
+      0, 100, 1, "assets/ExerciseIcons/timer.png", '(Weekly)'));
+  _achievementTracker.addAchievement(new Achievement("Jumprope for 5 minutes",
+      150, 20, 100, 1, "assets/ExerciseIcons/jumprope.png", '(Weekly)'));
+  _achievementTracker.addAchievement(new Achievement(
+      "Run for 10 minutes everyday",
+      500,
+      10,
+      100,
+      1,
+      "assets/ExerciseIcons/running2.png",
+      '(Weekly)'));
+
+  _achievementTracker.addProgression(new Achievement("Run for 100 miles", 10000,
+      5, 100, 1, "assets/ExerciseIcons/running.png", ''));
+  _achievementTracker.addProgression(new Achievement(
+      "Exercise for 30 minutes for a total of 100 days",
+      10000,
+      25,
+      100,
+      1,
+      "assets/ExerciseIcons/timer.png",
+      ''));
 }
 
 void main() {
@@ -46,6 +71,7 @@ class Kolubra extends StatelessWidget {
     return MaterialApp(
       title: 'Kolubra',
       theme: ThemeData(
+        fontFamily: 'LeavesAndGround',
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -152,14 +178,15 @@ class HomeState extends State<Home> {
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/clubpenguinmap.png'),
+            image: AssetImage('assets/background.png'),
             fit: BoxFit.fill,
           ),
         ),
         child: Stack(
           children: <Widget>[
-            Align(
-              alignment: Alignment.bottomLeft,
+            Positioned(
+              left: 40.0,
+              top: 300,
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: FloatingActionButton(
@@ -168,15 +195,9 @@ class HomeState extends State<Home> {
                     showDialog(
                       context: context,
                       builder: (BuildContext context) =>
-                          _buildQuestDialog(context),
+                          _achievementTracker.buildQuestDialog(context),
                     );
                   },
-                  // child: HexagonWidget.flat(
-                  //   width: 5,
-                  //   color: Colors.limeAccent,
-                  //   padding: 4.0,
-                  //   child: Icon(exclamationmark, color: Colors.black),
-                  // ),
                   child: Icon(CupertinoIcons.exclamationmark,
                       color: Colors.black, size: 25),
                   backgroundColor: Colors.limeAccent[400],
@@ -185,8 +206,9 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomRight,
+            Positioned(
+              left: 140.0,
+              bottom: 275,
               child: Padding(
                 padding: EdgeInsets.all(10),
                 child: FloatingActionButton(
@@ -208,32 +230,33 @@ class HomeState extends State<Home> {
                 ),
               ),
             ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    allCreatures[0].getEnergy(5);
-                    print(allCreatures[0].energy);
-                    currentForm = allCreatures[0].getImageByEnergy();
-                    print(currentForm);
-                    setState(
-                        () {}); // is there a less dumb way to do make sure it refreshes??
-                  },
-                  child:
-                      Icon(CupertinoIcons.paw, color: Colors.black, size: 25),
-                  backgroundColor: Colors.blue[400],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                ),
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
+            // Align(
+            //   alignment: Alignment.bottomCenter,
+            //   child: Padding(
+            //     padding: EdgeInsets.all(10),
+            //     child: FloatingActionButton(
+            //       heroTag: null,
+            //       onPressed: () {
+            //         allCreatures[0].getEnergy(5);
+            //         print(allCreatures[0].energy);
+            //         currentForm = allCreatures[0].getImageByEnergy();
+            //         print(currentForm);
+            //         setState(
+            //             () {}); // is there a less dumb way to do make sure it refreshes??
+            //       },
+            //       child:
+            //           Icon(CupertinoIcons.paw, color: Colors.black, size: 25),
+            //       backgroundColor: Colors.blue[400],
+            //       shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.all(Radius.circular(15.0))),
+            //     ),
+            //   ),
+            // ),
+            Positioned(
+              right: 80.0,
+              top: 200,
               child: Image.asset(currentForm, width: 100),
-            )
+            ),
           ],
         ));
   }
@@ -268,12 +291,10 @@ class HomeState extends State<Home> {
                 Center(
                   child: Row(
                     children: <Widget>[
-                      RichText(
-                        text: TextSpan(
-                          text: 'Sync to Google Fit',
-                          style: TextStyle(color: Colors.black),
-                        ),
-                        textScaleFactor: 1.5,
+                      Text(
+                        'Sync to Google Fit',
+                        style: TextStyle(color: Colors.black),
+                        textScaleFactor: 2,
                       ),
                       SizedBox(width: 10),
                       ElevatedButton(
@@ -333,66 +354,5 @@ class HomeState extends State<Home> {
         ),
       );
     });
-  }
-
-  Widget _buildQuestDialog(BuildContext context) {
-    return AlertDialog(
-      content: Stack(
-        clipBehavior: Clip.none,
-        children: <Widget>[
-          Positioned(
-            right: -40.0,
-            top: -35.0,
-            child: InkResponse(
-              onTap: () {
-                Navigator.of(context).pop();
-              },
-              child: CircleAvatar(
-                child: Icon(Icons.close),
-                backgroundColor: Colors.red,
-                radius: 15,
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                  color: Colors.green[200],
-                  padding: EdgeInsets.all(10),
-                  child: TextButton(
-                    child: Text('Quests'),
-                    onPressed: () {
-                      print(_achievementTracker.list.length);
-                          _achievementTracker.list[0].addProg(50);
-                          Navigator.push(context, new MaterialPageRoute(builder: (context) => _achievementTracker));
-                      setState(() {});
-                    },
-                  ),
-                ),
-              SizedBox(width: 10),
-              Container(
-                color: Colors.lime[300],
-                padding: EdgeInsets.all(10),
-                child: RichText(
-                  text: TextSpan(
-                    text: 'Progression',
-                    style: TextStyle(color: Colors.black),
-                  ),
-                  textScaleFactor: 1.5,
-                ),
-              ),
-            ],
-          ),
-          // Container(
-          //   child: SizedBox(
-          //     height: 100,
-          //     width: 100,
-          //   ),
-          //   color: Colors.lime[100],
-          // )
-        ],
-      ),
-    );
   }
 }

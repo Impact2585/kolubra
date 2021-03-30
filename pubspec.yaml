@@ -52,7 +52,7 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/clubpenguinmap.png
+    - assets/background.png
     - assets/JimmyAssets/jimmy1.png
     - assets/JimmyAssets/jimmy2.png
     - assets/ExerciseIcons/jumprope.png
@@ -70,7 +70,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
+  fonts:
+    - family: LeavesAndGround
+      fonts: 
+        - asset: assets/leaves_and_ground.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf
