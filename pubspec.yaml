@@ -21,7 +21,7 @@ environment:
   sdk: ">=2.7.0 <3.0.0"
 
 dependencies:
-  hexagon: ^0.1.1
+  hovering: ^1.0.4
   fit_kit: ^1.1.2
   flutter:
     sdk: flutter
@@ -53,12 +53,18 @@ flutter:
   #   - images/a_dot_ham.jpeg
   assets:
     - assets/background.png
+    - assets/quests.png
     - assets/JimmyAssets/jimmy1.png
     - assets/JimmyAssets/jimmy2.png
     - assets/ExerciseIcons/jumprope.png
     - assets/ExerciseIcons/running.png
     - assets/ExerciseIcons/running2.png
     - assets/ExerciseIcons/timer.png
+    - assets/Environments/cave.png
+    - assets/Environments/pier.png
+    - assets/Environments/rocks.png
+    - assets/Environments/pond.png
+    - assets/Environments/tree.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
@@ -73,7 +79,10 @@ flutter:
   fonts:
     - family: LeavesAndGround
       fonts: 
-        - asset: assets/leaves_and_ground.ttf
+        - asset: assets/Fonts/leaves_and_ground.ttf
+    - family: KiwiMaru
+      fonts:
+        - asset: assets/Fonts/KiwiMaru-Regular.ttf
   #   - family: Schyler
   #     fonts:
   #       - asset: fonts/Schyler-Regular.ttf

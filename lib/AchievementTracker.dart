@@ -46,14 +46,23 @@ class AchievementTracker {
                               Tab(
                                 child: Align(
                                   alignment: Alignment.center,
-                                  child: Text("QUESTS", textScaleFactor: 3),
+                                  child: Text(
+                                    "QUESTS",
+                                    textScaleFactor: 3,
+                                    style: TextStyle(
+                                        fontFamily: 'LeavesAndGround'),
+                                  ),
                                 ),
                               ),
                               Tab(
                                 child: Align(
                                   alignment: Alignment.center,
-                                  child:
-                                      Text("PROGRESSION", textScaleFactor: 3),
+                                  child: Text(
+                                    "Progression",
+                                    textScaleFactor: 3,
+                                    style: TextStyle(
+                                        fontFamily: 'LeavesAndGround'),
+                                  ),
                                 ),
                               ),
                             ]),

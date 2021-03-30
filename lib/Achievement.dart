@@ -76,7 +76,7 @@ class _Achievement extends State<Achievement> {
                               Text(
                                 ach.text,
                                 style: TextStyle(
-                                    fontSize: 30, color: Colors.white),
+                                    fontSize: 20, color: Colors.white),
                               ),
                               SizedBox(height: 5),
                               new Row(
@@ -86,13 +86,13 @@ class _Achievement extends State<Achievement> {
                                   Text(
                                     " " + ach.reward.toString(),
                                     style: TextStyle(
-                                        fontSize: 40,
+                                        fontSize: 20,
                                         color: Colors.limeAccent[400]),
                                   ),
                                   Text(
                                     " " + ach.achType,
                                     style: TextStyle(
-                                        fontSize: 40,
+                                        fontSize: 20,
                                         color: Colors.limeAccent[400]),
                                   ),
                                 ],

@@ -4,7 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:hexagon/hexagon.dart';
+import "package:hovering/hovering.dart";
 import 'package:flutter/cupertino.dart';
 import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:fit_kit/fit_kit.dart';
@@ -71,7 +71,7 @@ class Kolubra extends StatelessWidget {
     return MaterialApp(
       title: 'Kolubra',
       theme: ThemeData(
-        fontFamily: 'LeavesAndGround',
+        fontFamily: 'KiwiMaru',
         // This is the theme of your application.
         //
         // Try running your application with "flutter run". You'll see the
@@ -184,52 +184,43 @@ class HomeState extends State<Home> {
         ),
         child: Stack(
           children: <Widget>[
+            Align(
+                alignment: Alignment.bottomRight,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 62,
+                      icon: Image.asset('assets/quests.png'),
+                      iconSize: 125,
+                      onPressed: () {
+                        print(Image.asset('assets.quest.png').width);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _achievementTracker.buildQuestDialog(context),
+                        );
+                      },
+                    ))),
             Positioned(
-              left: 40.0,
-              top: 300,
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _achievementTracker.buildQuestDialog(context),
-                    );
-                  },
-                  child: Icon(CupertinoIcons.exclamationmark,
-                      color: Colors.black, size: 25),
-                  backgroundColor: Colors.limeAccent[400],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                ),
-              ),
-            ),
-            Positioned(
-              left: 140.0,
-              bottom: 275,
-              child: Padding(
-                padding: EdgeInsets.all(10),
-                child: FloatingActionButton(
-                  heroTag: null,
-                  onPressed: () {
-                    read();
-                    print(result);
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) =>
-                          _buildSyncDialog(context),
-                    );
-                  },
-                  child: Icon(CupertinoIcons.refresh,
-                      color: Colors.black, size: 25),
-                  backgroundColor: Colors.green[600],
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(15.0))),
-                ),
-              ),
-            ),
+                left: 20,
+                bottom: 20,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 40,
+                      color: Colors.grey[200],
+                      icon: Icon(Icons.people_alt),
+                      iconSize: 75,
+                      onPressed: () {
+                        read();
+                        print(result);
+                        showDialog(
+                          context: context,
+                          builder: (BuildContext context) =>
+                              _buildSyncDialog(context),
+                        );
+                      },
+                    ))),
             // Align(
             //   alignment: Alignment.bottomCenter,
             //   child: Padding(
@@ -252,11 +243,75 @@ class HomeState extends State<Home> {
             //     ),
             //   ),
             // ),
+            // Positioned(
+            //   right: 80.0,
+            //   top: 200,
+            //   child: Image.asset(currentForm, width: 100),
+            // ),
             Positioned(
-              right: 80.0,
-              top: 200,
-              child: Image.asset(currentForm, width: 100),
-            ),
+                right: 15,
+                top: 25,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 25,
+                      color: Colors.grey[800],
+                      icon: Icon(Icons.settings),
+                      iconSize: 50,
+                      onPressed: () {},
+                    ))),
+            Positioned(
+                left: 125,
+                bottom: 250,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 112,
+                      icon: Image.asset('assets/Environments/cave.png'),
+                      iconSize: 225,
+                      onPressed: () {
+                        print("cave");
+                      },
+                    ))),
+            Positioned(
+                right: -20,
+                top: 150,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 75,
+                      icon: Image.asset('assets/Environments/rocks.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                        print("rocks");
+                      },
+                    ))),
+            Positioned(
+                right: 175,
+                top: 150,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 100,
+                      icon: Image.asset('assets/Environments/tree.png'),
+                      iconSize: 200,
+                      onPressed: () {
+                        print("tree");
+                      },
+                    ))),
+            Positioned(
+                left: 50,
+                bottom: 70,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 100,
+                      icon: Image.asset('assets/Environments/pier.png'),
+                      iconSize: 200,
+                      onPressed: () {
+                        print("pier");
+                      },
+                    ))),
           ],
         ));
   }
