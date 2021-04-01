@@ -8,7 +8,7 @@ import 'package:flutter/src/foundation/diagnostics.dart';
 // ignore: must_be_immutable
 class Achievement extends StatefulWidget {
   String text;
-  String achType; // daily, weekly, or progression
+  int achType; // daily - 0, weekly - 1, or progression - 2
   int reward;
   int progress;
   int total;
@@ -16,7 +16,7 @@ class Achievement extends StatefulWidget {
   String icon; // for some reason i cant just print an image
 
   Achievement(String text, int reward, int progress, int total, int wkey,
-      String icon, String achType) {
+      String icon, int achType) {
     this.text = text;
     this.reward = reward;
     this.progress = progress;
@@ -79,24 +79,7 @@ class _Achievement extends State<Achievement> {
                                     fontSize: 20, color: Colors.white),
                               ),
                               SizedBox(height: 5),
-                              new Row(
-                                children: <Widget>[
-                                  new Icon(CupertinoIcons.bolt_circle,
-                                      color: Colors.orangeAccent, size: 30),
-                                  Text(
-                                    " " + ach.reward.toString(),
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                  Text(
-                                    " " + ach.achType,
-                                    style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.limeAccent[400]),
-                                  ),
-                                ],
-                              ),
+                              getOptionalText(),
                             ],
                           )),
                     ],
@@ -119,5 +102,47 @@ class _Achievement extends State<Achievement> {
         SizedBox(height: 10),
       ],
     );
+  }
+
+  Widget getOptionalText() {
+    if (ach.achType == 0) {
+      return Row(
+        children: <Widget>[
+          new Icon(CupertinoIcons.bolt_circle,
+              color: Colors.orangeAccent, size: 30),
+          Text(
+            " " + ach.reward.toString(),
+            style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
+          ),
+          Text(
+            " (Daily) ",
+            style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
+          ),
+        ],
+      );
+    } else if (ach.achType == 1) {
+      return Row(
+        children: <Widget>[
+          new Icon(CupertinoIcons.bolt_circle,
+              color: Colors.orangeAccent, size: 30),
+          Text(
+            " " + ach.reward.toString(),
+            style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
+          ),
+          Text(
+            " (Weekly) ",
+            style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
+          ),
+        ],
+      );
+    } else {
+      return Text(
+        " Progression: " +
+            ach.progress.toString() +
+            " / " +
+            ach.total.toString(),
+        style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
+      );
+    }
   }
 }

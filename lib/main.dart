@@ -29,30 +29,30 @@ Future<void> init() async {
       100,
       1,
       "assets/ExerciseIcons/running.png",
-      '(Daily)'));
+      0));
   _achievementTracker.addAchievement(new Achievement("Jog for 10 minutes", 300,
-      0, 100, 1, "assets/ExerciseIcons/timer.png", '(Weekly)'));
+      0, 100, 1, "assets/ExerciseIcons/timer.png", 1));
   _achievementTracker.addAchievement(new Achievement("Jumprope for 5 minutes",
-      150, 20, 100, 1, "assets/ExerciseIcons/jumprope.png", '(Weekly)'));
+      150, 20, 100, 1, "assets/ExerciseIcons/jumprope.png", 1));
   _achievementTracker.addAchievement(new Achievement(
       "Run for 10 minutes everyday",
-      500,
+      0,
       10,
       100,
       1,
       "assets/ExerciseIcons/running2.png",
-      '(Weekly)'));
+      1));
 
   _achievementTracker.addProgression(new Achievement("Run for 100 miles", 10000,
-      5, 100, 1, "assets/ExerciseIcons/running.png", ''));
+      2, 5, 1, "assets/ExerciseIcons/running.png", 2));
   _achievementTracker.addProgression(new Achievement(
       "Exercise for 30 minutes for a total of 100 days",
-      10000,
-      25,
-      100,
+      0,
+      1,
+      5,
       1,
       "assets/ExerciseIcons/timer.png",
-      ''));
+      2));
 }
 
 void main() {
@@ -184,6 +184,58 @@ class HomeState extends State<Home> {
         ),
         child: Stack(
           children: <Widget>[
+            Positioned(
+                right: -50,
+                bottom: 250,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 112,
+                      icon: Image.asset('assets/Environments/cave.png'),
+                      iconSize: 225,
+                      onPressed: () {
+                        print("cave");
+                      },
+                    ))),
+            Positioned(
+                right: -20,
+                top: 150,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 75,
+                      icon: Image.asset('assets/Environments/rocks_locked.png'),
+                      iconSize: 150,
+                      onPressed: () {
+                        print("rocks");
+                      },
+                    ))),
+            Positioned(
+                right: 175,
+                top: 150,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 100,
+                      icon: Image.asset('assets/Environments/tree_locked.png'),
+                      iconSize: 200,
+                      onPressed: () {
+                        print("tree");
+                      },
+                    ))),
+            Positioned(
+                left: 100,
+                bottom: 70,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 100,
+                      icon: Image.asset('assets/Environments/pier.png'),
+                      iconSize: 200,
+                      onPressed: () {
+                        print("pier");
+                      },
+                    ))),
             Align(
                 alignment: Alignment.bottomRight,
                 child: Material(
@@ -202,25 +254,62 @@ class HomeState extends State<Home> {
                       },
                     ))),
             Positioned(
-                left: 20,
-                bottom: 20,
-                child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      splashRadius: 40,
-                      color: Colors.grey[200],
-                      icon: Icon(Icons.people_alt),
-                      iconSize: 75,
-                      onPressed: () {
-                        read();
-                        print(result);
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) =>
-                              _buildSyncDialog(context),
-                        );
-                      },
-                    ))),
+              left: 20,
+              bottom: 20,
+              child: Material(
+                color: Colors.transparent,
+                child: InkResponse(
+                  onTap: () {
+                    read();
+                    print(result);
+                    showDialog(
+                      context: context,
+                      builder: (BuildContext context) =>
+                          _buildSyncDialog(context),
+                    );
+                  },
+                  child: Container(
+                      decoration: BoxDecoration(
+                          color: Colors.grey[900],
+                          border: Border.all(
+                            color: Colors.transparent,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(40))),
+                      child: Row(
+                        children: [
+                          Container(
+                            height: 60,
+                            width: 60,
+                            decoration: BoxDecoration(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(40)),
+                                image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/CalebAssets/caleb1.png'),
+                                    fit: BoxFit.cover)),
+                          ),
+                          Text(
+                            "   Kayla   ",
+                            textScaleFactor: 3,
+                            style: TextStyle(
+                                fontFamily: 'LeavesAndGround',
+                                color: Colors.white),
+                          ),
+                        ],
+                      )),
+                ),
+              ),
+            ),
+            // child:
+            // Material(
+            //   color: Colors.transparent,
+            //   child: IconButton(
+            //     splashRadius: 40,
+            //     color: Colors.grey[200],
+            //     icon: Icon(Icons.people_alt),
+            //     iconSize: 75,
+
+            //   ))),),
             // Align(
             //   alignment: Alignment.bottomCenter,
             //   child: Padding(
@@ -259,58 +348,6 @@ class HomeState extends State<Home> {
                       icon: Icon(Icons.settings),
                       iconSize: 50,
                       onPressed: () {},
-                    ))),
-            Positioned(
-                left: 125,
-                bottom: 250,
-                child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      splashRadius: 112,
-                      icon: Image.asset('assets/Environments/cave.png'),
-                      iconSize: 225,
-                      onPressed: () {
-                        print("cave");
-                      },
-                    ))),
-            Positioned(
-                right: -20,
-                top: 150,
-                child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      splashRadius: 75,
-                      icon: Image.asset('assets/Environments/rocks.png'),
-                      iconSize: 150,
-                      onPressed: () {
-                        print("rocks");
-                      },
-                    ))),
-            Positioned(
-                right: 175,
-                top: 150,
-                child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      splashRadius: 100,
-                      icon: Image.asset('assets/Environments/tree.png'),
-                      iconSize: 200,
-                      onPressed: () {
-                        print("tree");
-                      },
-                    ))),
-            Positioned(
-                left: 50,
-                bottom: 70,
-                child: Material(
-                    color: Colors.transparent,
-                    child: IconButton(
-                      splashRadius: 100,
-                      icon: Image.asset('assets/Environments/pier.png'),
-                      iconSize: 200,
-                      onPressed: () {
-                        print("pier");
-                      },
                     ))),
           ],
         ));

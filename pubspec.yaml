@@ -65,6 +65,13 @@ flutter:
     - assets/Environments/rocks.png
     - assets/Environments/pond.png
     - assets/Environments/tree.png
+    - assets/Environments/cave_locked.png
+    - assets/Environments/pier_locked.png
+    - assets/Environments/rocks_locked.png
+    - assets/Environments/tree_locked.png
+    - assets/CalebAssets/caleb1.png
+    - assets/CalebAssets/caleb2.png
+
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.
 
