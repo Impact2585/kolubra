@@ -78,7 +78,7 @@ class AchievementTracker {
                           itemCount: list.length,
                         ),
                       ),
-                      new ListView.builder(
+                      ListView.builder(
                         padding: EdgeInsets.all(10),
                         shrinkWrap: true,
                         itemBuilder: _buildProgression,

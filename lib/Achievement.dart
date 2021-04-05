@@ -41,13 +41,18 @@ class _Achievement extends State<Achievement> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Container(
+        child: Column(
       children: <Widget>[
         SizedBox(height: 10),
         Container(
           decoration: BoxDecoration(
             color: Colors.green[900],
             borderRadius: BorderRadius.all(Radius.circular(20)),
+            border: Border.all(
+              color: Colors.grey[200],
+              width: 1.0,
+            ),
           ),
           padding: EdgeInsets.all(10),
           child: Column(
@@ -62,6 +67,7 @@ class _Achievement extends State<Achievement> {
                         width: 75,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
+                            border: getBorder(),
                             image: DecorationImage(
                                 image: AssetImage(ach.icon),
                                 fit: BoxFit.cover)),
@@ -101,7 +107,26 @@ class _Achievement extends State<Achievement> {
         ),
         SizedBox(height: 10),
       ],
-    );
+    ));
+  }
+
+  BoxBorder getBorder() {
+    if (ach.achType == 0) {
+      return Border.all(
+        color: Colors.amber[800],
+        width: 4.0,
+      );
+    } else if (ach.achType == 1) {
+      return Border.all(
+        color: Colors.blue[300],
+        width: 4.0,
+      );
+    } else {
+      return Border.all(
+        color: Colors.yellowAccent[400],
+        width: 6.0,
+      );
+    }
   }
 
   Widget getOptionalText() {

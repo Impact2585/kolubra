@@ -12,6 +12,7 @@ import 'package:kolubra/AchievementTracker.dart';
 
 import 'Achievement.dart';
 import 'Creature.dart';
+import 'Environment.dart';
 
 List<Creature> allCreatures = List();
 AchievementTracker _achievementTracker = AchievementTracker();
@@ -22,6 +23,8 @@ Future<void> init() async {
   Jimmy.addStage("assets/JimmyAssets/jimmy1.png", 0);
   Jimmy.addStage("assets/JimmyAssets/jimmy2.png", 50);
   allCreatures.add(Jimmy);
+
+  // Weekly/Daily quests
   _achievementTracker.addAchievement(new Achievement(
       "Walk 250 steps every hour",
       100,
@@ -43,15 +46,22 @@ Future<void> init() async {
       "assets/ExerciseIcons/running2.png",
       1));
 
-  _achievementTracker.addProgression(new Achievement("Run for 100 miles", 10000,
-      2, 5, 1, "assets/ExerciseIcons/running.png", 2));
+  // Lifetime progression quests
   _achievementTracker.addProgression(new Achievement(
-      "Exercise for 30 minutes for a total of 100 days",
-      0,
+      "Lift weights for 20 lifetime hours",
+      10000,
       1,
       5,
       1,
-      "assets/ExerciseIcons/timer.png",
+      "assets/Creatures/Cave/golem3.png",
+      2));
+  _achievementTracker.addProgression(new Achievement(
+      "Run for 100 lifetime miles",
+      0,
+      2,
+      5,
+      1,
+      "assets/Creatures/Forest/demiguise2.png",
       2));
 }
 
@@ -194,7 +204,7 @@ class HomeState extends State<Home> {
                       icon: Image.asset('assets/Environments/cave.png'),
                       iconSize: 225,
                       onPressed: () {
-                        print("cave");
+                        Navigator.of(context).push(new Transition());
                       },
                     ))),
             Positioned(
@@ -233,7 +243,7 @@ class HomeState extends State<Home> {
                       icon: Image.asset('assets/Environments/pier.png'),
                       iconSize: 200,
                       onPressed: () {
-                        print("pier");
+                        Navigator.of(context).push(new Transition());
                       },
                     ))),
             Align(
@@ -272,7 +282,8 @@ class HomeState extends State<Home> {
                       decoration: BoxDecoration(
                           color: Colors.grey[900],
                           border: Border.all(
-                            color: Colors.transparent,
+                            color: Colors.grey[400],
+                            width: 3.0,
                           ),
                           borderRadius: BorderRadius.all(Radius.circular(40))),
                       child: Row(
@@ -283,6 +294,10 @@ class HomeState extends State<Home> {
                             decoration: BoxDecoration(
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(40)),
+                                border: Border.all(
+                                  color: Colors.grey[400],
+                                  width: 1.0,
+                                ),
                                 image: DecorationImage(
                                     image: AssetImage(
                                         'assets/CalebAssets/caleb1.png'),
