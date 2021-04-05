@@ -1,26 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'Creature.dart';
 
-class Transition extends CupertinoPageRoute {
-  Transition() : super(builder: (BuildContext context) => new Environment());
-
-  // OPTIONAL IF YOU WISH TO HAVE SOME EXTRA ANIMATION WHILE ROUTING
-  @override
-  Widget buildPage(BuildContext context, Animation<double> animation,
-      Animation<double> secondaryAnimation) {
-    return ScaleTransition(
-      scale: animation,
-      child: FadeTransition(
-        opacity: animation,
-        child: new Environment(),
-      ),
-    );
-  }
+class Transition extends PageRouteBuilder {
+  final enterPage;
+  final exitPage;
+  Transition({this.exitPage, this.enterPage})
+      : super(
+          pageBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+          ) =>
+              enterPage,
+          transitionsBuilder: (
+            BuildContext context,
+            Animation<double> animation,
+            Animation<double> secondaryAnimation,
+            Widget child,
+          ) =>
+              Stack(
+            children: <Widget>[
+              FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+              FadeTransition(
+                opacity: animation,
+                child: child,
+              ),
+            ],
+          ),
+        );
 }
 
+// ignore: must_be_immutable
 class Environment extends StatefulWidget {
+  String backgroundImage;
+  List<Creature> creatures;
+
+  Environment(String backgroundImage, List<Creature> creatures) {
+    this.backgroundImage = backgroundImage;
+    this.creatures = creatures;
+  }
+
   @override
-  _EnvironmentState createState() => new _EnvironmentState();
+  _EnvironmentState createState() =>
+      new _EnvironmentState(new Environment(backgroundImage, creatures));
 }
 
 class _EnvironmentState extends State<Environment> {
@@ -56,6 +82,10 @@ class _EnvironmentState extends State<Environment> {
       ),
     ),
   ];
+
+  Environment ach;
+
+  _EnvironmentState(this.ach);
 
   @override
   Widget build(BuildContext context) {
@@ -159,6 +189,22 @@ class _EnvironmentState extends State<Environment> {
                 bottom: 150,
                 child: Icon(Icons.arrow_forward_ios_outlined,
                     size: 60, color: Colors.white)),
+            Align(
+                alignment: Alignment.bottomLeft,
+                child: Container(
+                    padding: EdgeInsets.all(20),
+                    child: ElevatedButton(
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(
+                              Colors.blue[200]),
+                        ),
+                        child: Icon(
+                          Icons.keyboard_return_outlined,
+                          size: 40,
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        }))),
           ],
         ));
   }

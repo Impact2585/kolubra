@@ -14,7 +14,7 @@ import 'Achievement.dart';
 import 'Creature.dart';
 import 'Environment.dart';
 
-List<Creature> allCreatures = List();
+List<Creature> allCreatures = <Creature>[];
 AchievementTracker _achievementTracker = AchievementTracker();
 
 Future<void> init() async {
@@ -204,7 +204,11 @@ class HomeState extends State<Home> {
                       icon: Image.asset('assets/Environments/cave.png'),
                       iconSize: 225,
                       onPressed: () {
-                        Navigator.of(context).push(new Transition());
+                        Navigator.of(context).push(new Transition(
+                            exitPage: this,
+                            enterPage: new Environment(
+                                'assets/Creatures/Cave/golem1.png',
+                                <Creature>[])));
                       },
                     ))),
             Positioned(
@@ -242,9 +246,7 @@ class HomeState extends State<Home> {
                       splashRadius: 100,
                       icon: Image.asset('assets/Environments/pier.png'),
                       iconSize: 200,
-                      onPressed: () {
-                        Navigator.of(context).push(new Transition());
-                      },
+                      onPressed: () {},
                     ))),
             Align(
                 alignment: Alignment.bottomRight,
