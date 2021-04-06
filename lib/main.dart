@@ -207,7 +207,7 @@ class HomeState extends State<Home> {
                         Navigator.of(context).push(new Transition(
                             exitPage: this,
                             enterPage: new Environment(
-                                'assets/Creatures/Cave/golem1.png',
+                                'assets/Creatures/Cave/golem2.png',
                                 <Creature>[])));
                       },
                     ))),
@@ -306,7 +306,7 @@ class HomeState extends State<Home> {
                                     fit: BoxFit.cover)),
                           ),
                           Text(
-                            "   Kayla   ",
+                            "   Caleb   ",
                             textScaleFactor: 3,
                             style: TextStyle(
                                 fontFamily: 'LeavesAndGround',

@@ -53,30 +53,17 @@ flutter:
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
   assets:
-    - assets/background.png
-    - assets/quests.png
-    - assets/JimmyAssets/jimmy1.png
-    - assets/JimmyAssets/jimmy2.png
-    - assets/ExerciseIcons/jumprope.png
-    - assets/ExerciseIcons/running.png
-    - assets/ExerciseIcons/running2.png
-    - assets/ExerciseIcons/timer.png
-    - assets/Environments/cave.png
-    - assets/Environments/pier.png
-    - assets/Environments/rocks.png
-    - assets/Environments/pond.png
-    - assets/Environments/tree.png
-    - assets/Environments/cave_locked.png
-    - assets/Environments/pier_locked.png
-    - assets/Environments/rocks_locked.png
-    - assets/Environments/tree_locked.png
-    - assets/CalebAssets/caleb1.png
-    - assets/CalebAssets/caleb2.png
-    - assets/Creatures/Cave/golem1.png
-    - assets/Creatures/Cave/golem2.png
-    - assets/Creatures/Cave/golem3.png
-    - assets/Creatures/Forest/demiguise1.png
-    - assets/Creatures/Forest/demiguise2.png
+    - assets/CalebAssets/
+    - assets/Collectibles/Body/
+    - assets/Collectibles/Emotes/
+    - assets/Collectibles/Food/
+    - assets/Collectibles/Hats/
+    - assets/Creatures/Cave/
+    - assets/Creatures/Forest/
+    - assets/Environments/
+    - assets/ExerciseIcons/
+    - assets/JimmyAssets/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

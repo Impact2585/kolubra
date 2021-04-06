@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'Creature.dart';
 
@@ -7,6 +8,7 @@ class Transition extends PageRouteBuilder {
   final exitPage;
   Transition({this.exitPage, this.enterPage})
       : super(
+          transitionDuration: Duration(seconds: 1),
           pageBuilder: (
             BuildContext context,
             Animation<double> animation,
@@ -45,22 +47,13 @@ class Environment extends StatefulWidget {
   }
 
   @override
-  _EnvironmentState createState() =>
-      new _EnvironmentState(new Environment(backgroundImage, creatures));
+  _EnvironmentState createState() => new _EnvironmentState(
+      new Environment(backgroundImage, creatures), backgroundImage);
 }
 
 class _EnvironmentState extends State<Environment> {
+  String backgroundImage;
   final List<Tab> myTabs = <Tab>[
-    Tab(
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          "Food",
-          textScaleFactor: 2,
-          style: TextStyle(fontFamily: 'LeavesAndGround'),
-        ),
-      ),
-    ),
     Tab(
       child: Align(
         alignment: Alignment.center,
@@ -75,7 +68,17 @@ class _EnvironmentState extends State<Environment> {
       child: Align(
         alignment: Alignment.center,
         child: Text(
-          "Store",
+          "Feed",
+          textScaleFactor: 2,
+          style: TextStyle(fontFamily: 'LeavesAndGround'),
+        ),
+      ),
+    ),
+    Tab(
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          "Shop",
           textScaleFactor: 2,
           style: TextStyle(fontFamily: 'LeavesAndGround'),
         ),
@@ -83,16 +86,85 @@ class _EnvironmentState extends State<Environment> {
     ),
   ];
 
+  final List<String> hats = <String>[
+    'assets/Collectibles/Hats/bunny.png',
+    'assets/Collectibles/Hats/baseball.png',
+    'assets/Collectibles/Hats/mask.png',
+    'assets/Collectibles/Hats/party_hat.png',
+    'assets/Collectibles/Hats/sombrero.png',
+  ];
+  final List<String> food = <String>[
+    'assets/Collectibles/Food/grub.png',
+    'assets/Collectibles/Food/minerals.png',
+    'assets/Collectibles/Food/muffin.png'
+  ];
+  final List<String> other = <String>[
+    'assets/Collectibles/Body/apron.png',
+    'assets/Collectibles/Body/gold_wings.png',
+    'assets/Collectibles/Body/heart_pendant.png',
+    'assets/Collectibles/Emotes/guitar.png',
+    'assets/Collectibles/Emotes/rockfall.png'
+  ];
+
+  List<Widget> tabs;
+
   Environment ach;
 
-  _EnvironmentState(this.ach);
+  _EnvironmentState(this.ach, String backgroundImage) {
+    this.backgroundImage = backgroundImage;
+  }
 
   @override
   Widget build(BuildContext context) {
+    tabs = <Widget>[
+      ListView.separated(
+        // Food tab
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+        itemCount: max(other.length, hats.length),
+        itemBuilder: (BuildContext context, int index) {
+          List<Widget> col = <Widget>[];
+          if (hats.length > index) {
+            col.add(itemIcon(hats[index]));
+          }
+          if (other.length > index) {
+            col.add(SizedBox(height: 20));
+            col.add(itemIcon(other[index]));
+          }
+          return Column(
+            children: col,
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: 20);
+        },
+      ),
+      ListView.separated(
+        // Food tab
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.fromLTRB(20, 40, 20, 0),
+        itemCount: (food.length / 2).ceil(),
+        itemBuilder: (BuildContext context, int index) {
+          List<Widget> col = <Widget>[];
+          col.add(itemIcon(food[index * 2]));
+          if (food.length > index * 2 + 1) {
+            col.add(SizedBox(height: 20));
+            col.add(itemIcon(food[index * 2 + 1]));
+          }
+          return Column(
+            children: col,
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return SizedBox(width: 20);
+        },
+      ),
+      Text("3"),
+    ];
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage('assets/Creatures/Cave/golem1.png'),
+            image: AssetImage(backgroundImage),
             fit: BoxFit.fill,
           ),
         ),
@@ -158,11 +230,7 @@ class _EnvironmentState extends State<Environment> {
                       Container(
                         color: Colors.blue,
                         height: 240,
-                        child: TabBarView(children: [
-                          Text("1"),
-                          Text("2"),
-                          Text("3"),
-                        ]),
+                        child: TabBarView(children: tabs),
                       ),
                       TabBar(
                           labelColor: Colors.white,
@@ -180,15 +248,21 @@ class _EnvironmentState extends State<Environment> {
               ),
             ),
             Positioned(
-                left: 0,
-                bottom: 150,
-                child: Icon(Icons.arrow_back_ios_outlined,
-                    size: 60, color: Colors.white)),
+              left: -10,
+              bottom: 150,
+              child: TextButton(
+                  onPressed: () {},
+                  child: Icon(Icons.arrow_back_ios_outlined,
+                      size: 60, color: Colors.white)),
+            ),
             Positioned(
-                right: 0,
-                bottom: 150,
-                child: Icon(Icons.arrow_forward_ios_outlined,
-                    size: 60, color: Colors.white)),
+              right: -10,
+              bottom: 150,
+              child: TextButton(
+                  onPressed: () {},
+                  child: Icon(Icons.arrow_forward_ios_outlined,
+                      size: 60, color: Colors.white)),
+            ),
             Align(
                 alignment: Alignment.bottomLeft,
                 child: Container(
@@ -207,5 +281,44 @@ class _EnvironmentState extends State<Environment> {
                         }))),
           ],
         ));
+  }
+
+  Widget itemIcon(String img) {
+    return Material(
+      color: Colors.transparent,
+      child: InkResponse(
+          onTap: () {
+            if (img == 'assets/Collectibles/Hats/sombrero.png') {
+              setState(() {
+                backgroundImage = 'assets/Creatures/Cave/sombrero.png';
+              });
+            }
+          },
+          child: Container(
+              height: 75,
+              width: 75,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.all(Radius.circular(10)),
+                gradient: RadialGradient(
+                  colors: <Color>[
+                    Colors.blue[400],
+                    Colors.blue[100],
+                  ],
+                ),
+                color: Colors.blue[200],
+                border: Border.all(
+                  color: Colors.black,
+                  width: 0.0,
+                ),
+              ),
+              padding: EdgeInsets.all(10),
+              child: Container(
+                  height: 25,
+                  width: 25,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      image: DecorationImage(
+                          image: AssetImage(img), fit: BoxFit.contain))))),
+    );
   }
 }
