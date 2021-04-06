@@ -1,12 +1,8 @@
 import 'dart:async';
-import 'dart:convert';
-import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import "package:hovering/hovering.dart";
 import 'package:flutter/cupertino.dart';
-import 'package:cupertino_icons/cupertino_icons.dart';
 import 'package:fit_kit/fit_kit.dart';
 import 'package:kolubra/AchievementTracker.dart';
 
@@ -153,7 +149,6 @@ class HomeState extends State<Home> {
     } catch (e) {
       result = 'readAll: $e';
     }
-
     setState(() {});
   }
 
@@ -185,6 +180,7 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
+    read();
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -371,10 +367,8 @@ class HomeState extends State<Home> {
   }
 
   Widget _buildSyncDialog(BuildContext context) {
-    List items =
-        results.entries.expand((entry) => [entry.key, ...entry.value]).toList();
-    print("ITEMS: ");
-    print(items);
+    while(results.length == 0)
+      read();
     return StatefulBuilder(builder: (context, setState) {
       return AlertDialog(
         content: Stack(
@@ -403,21 +397,22 @@ class HomeState extends State<Home> {
                       Text(
                         'Sync to Google Fit',
                         style: TextStyle(color: Colors.black),
-                        textScaleFactor: 2,
+                        textScaleFactor: 1.2,
                       ),
-                      SizedBox(width: 10),
+                      SizedBox(width: 1),
                       ElevatedButton(
                         onPressed: () {
                           print("DF");
-                          setState(() {
-                            items = results.entries
-                                .expand((entry) => [entry.key, ...entry.value])
-                                .toList();
-                          });
+                          read();
+                          setState(() {});
                         },
-                        child: Icon(CupertinoIcons.refresh,
-                            color: Colors.black, size: 25),
+                        child: Align(
+                          alignment: Alignment.centerLeft,
+                          child: Icon(CupertinoIcons.refresh,
+                            color: Colors.black, size: 25)),
                         style: ElevatedButton.styleFrom(
+                          minimumSize: new Size(50, 30),
+                          fixedSize: new Size(50, 30),
                           primary: Colors.green, // background
                           onPrimary: Colors.green, // foreground
                         ),
@@ -426,35 +421,33 @@ class HomeState extends State<Home> {
                   ),
                 ),
                 Container(
-                  height: 600,
-                  width: 500,
-                  child: ListView.builder(
-                    itemCount: items.length,
-                    itemBuilder: (context, index) {
-                      final item = items[index];
-                      if (item is DataType) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(vertical: 8),
-                          child: Text(
-                            '$item - ${results[item].length}',
-                            style: Theme.of(context).textTheme.title,
-                          ),
-                        );
-                      } else if (item is FitData) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                            vertical: 4,
-                            horizontal: 8,
-                          ),
-                          child: Text(
-                            '$item',
-                            style: Theme.of(context).textTheme.caption,
-                          ),
-                        );
-                      }
-
-                      return Container();
-                    },
+                  height: MediaQuery.of(context).size.height - 164,
+                  width: MediaQuery.of(context).size.width - 40,
+                  child: Container(
+                    margin: EdgeInsets.all(10),
+                    child: Table(
+                      border: TableBorder.all(),
+                      columnWidths: {0: FractionColumnWidth(.2), 1: FractionColumnWidth(.8)},
+                      children: [
+                        TableRow( children: [
+                          Column(children:[
+                            Text('Heartrate')
+                          ]),
+                          Column(children:[
+                            Text('no heartrate found'),
+                              //Text(results[DataType.HEART_RATE].getRange(0, 0).toString()),
+                          ]),
+                        ]),
+                        TableRow( children: [
+                          Column(children:[
+                            Text('Step Count')
+                          ]),
+                          Column(children:[
+                            Text(results[DataType.STEP_COUNT].length.toString()),
+                          ]),
+                        ]),
+                      ],
+                    ),
                   ),
                 ),
               ],
