@@ -9,6 +9,7 @@ import 'package:kolubra/AchievementTracker.dart';
 import 'Achievement.dart';
 import 'Creature.dart';
 import 'Environment.dart';
+import 'FitSync.dart';
 
 List<Creature> allCreatures = <Creature>[];
 AchievementTracker _achievementTracker = AchievementTracker();
@@ -35,7 +36,7 @@ Future<void> init() async {
       150, 20, 100, 1, "assets/ExerciseIcons/jumprope.png", 1));
   _achievementTracker.addAchievement(new Achievement(
       "Run for 10 minutes everyday",
-      0,
+      500,
       10,
       100,
       1,
@@ -114,73 +115,9 @@ class Home extends StatefulWidget {
 
 class HomeState extends State<Home> {
   String currentForm = allCreatures[0].getImageByEnergy();
-  String result = "";
-  Map<DataType, List<FitData>> results = Map();
-  bool permissions;
-
-  @override
-  void initState() {
-    super.initState();
-    hasPermissions();
-  }
-
-  Future<void> read() async {
-    results.clear();
-
-    try {
-      permissions = await FitKit.requestPermissions(DataType.values);
-      if (!permissions) {
-        result = 'requestPermissions: failed';
-      } else {
-        for (DataType type in DataType.values) {
-          try {
-            results[type] = await FitKit.read(
-              type,
-              dateFrom: DateTime.now().subtract(Duration(days: 5)),
-              dateTo: DateTime.now(),
-            );
-          } on UnsupportedException catch (e) {
-            results[e.dataType] = [];
-          }
-        }
-
-        result = 'readAll: success';
-      }
-    } catch (e) {
-      result = 'readAll: $e';
-    }
-    setState(() {});
-  }
-
-  Future<void> revokePermissions() async {
-    results.clear();
-
-    try {
-      await FitKit.revokePermissions();
-      permissions = await FitKit.hasPermissions(DataType.values);
-      result = 'revokePermissions: success';
-    } catch (e) {
-      result = 'revokePermissions: $e';
-    }
-
-    setState(() {});
-  }
-
-  Future<void> hasPermissions() async {
-    try {
-      permissions = await FitKit.hasPermissions(DataType.values);
-    } catch (e) {
-      result = 'hasPermissions: $e';
-    }
-
-    if (!mounted) return;
-
-    setState(() {});
-  }
 
   @override
   Widget build(BuildContext context) {
-    read();
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
@@ -197,15 +134,9 @@ class HomeState extends State<Home> {
                     color: Colors.transparent,
                     child: IconButton(
                       splashRadius: 112,
-                      icon: Image.asset('assets/Environments/cave.png'),
+                      icon: Image.asset('assets/Environments/cave_locked.png'),
                       iconSize: 225,
-                      onPressed: () {
-                        Navigator.of(context).push(new Transition(
-                            exitPage: this,
-                            enterPage: new Environment(
-                                'assets/Creatures/Cave/golem2.png',
-                                <Creature>[])));
-                      },
+                      onPressed: () {},
                     ))),
             Positioned(
                 right: -20,
@@ -227,10 +158,14 @@ class HomeState extends State<Home> {
                     color: Colors.transparent,
                     child: IconButton(
                       splashRadius: 100,
-                      icon: Image.asset('assets/Environments/tree_locked.png'),
+                      icon: Image.asset('assets/Environments/tree.png'),
                       iconSize: 200,
                       onPressed: () {
-                        print("tree");
+                        Navigator.of(context).push(new Transition(
+                            exitPage: this,
+                            enterPage: new Environment(
+                                'assets/Creatures/Cave/golem2.png',
+                                <Creature>[])));
                       },
                     ))),
             Positioned(
@@ -268,12 +203,9 @@ class HomeState extends State<Home> {
                 color: Colors.transparent,
                 child: InkResponse(
                   onTap: () {
-                    read();
-                    print(result);
                     showDialog(
                       context: context,
-                      builder: (BuildContext context) =>
-                          _buildSyncDialog(context),
+                      builder: (BuildContext context) => new FitSync(),
                     );
                   },
                   child: Container(
@@ -302,7 +234,7 @@ class HomeState extends State<Home> {
                                     fit: BoxFit.cover)),
                           ),
                           Text(
-                            "   Caleb   ",
+                            "   bleh0.5   ",
                             textScaleFactor: 3,
                             style: TextStyle(
                                 fontFamily: 'LeavesAndGround',
@@ -364,97 +296,5 @@ class HomeState extends State<Home> {
                     ))),
           ],
         ));
-  }
-
-  Widget _buildSyncDialog(BuildContext context) {
-    while(results.length == 0)
-      read();
-    return StatefulBuilder(builder: (context, setState) {
-      return AlertDialog(
-        content: Stack(
-          clipBehavior: Clip.none,
-          children: <Widget>[
-            Positioned(
-              right: -40.0,
-              top: -35.0,
-              child: InkResponse(
-                onTap: () {
-                  Navigator.of(context).pop();
-                },
-                child: CircleAvatar(
-                  child: Icon(Icons.close),
-                  backgroundColor: Colors.red,
-                  radius: 15,
-                ),
-              ),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Center(
-                  child: Row(
-                    children: <Widget>[
-                      Text(
-                        'Sync to Google Fit',
-                        style: TextStyle(color: Colors.black),
-                        textScaleFactor: 1.2,
-                      ),
-                      SizedBox(width: 1),
-                      ElevatedButton(
-                        onPressed: () {
-                          print("DF");
-                          read();
-                          setState(() {});
-                        },
-                        child: Align(
-                          alignment: Alignment.centerLeft,
-                          child: Icon(CupertinoIcons.refresh,
-                            color: Colors.black, size: 25)),
-                        style: ElevatedButton.styleFrom(
-                          minimumSize: new Size(50, 30),
-                          fixedSize: new Size(50, 30),
-                          primary: Colors.green, // background
-                          onPrimary: Colors.green, // foreground
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                Container(
-                  height: MediaQuery.of(context).size.height - 164,
-                  width: MediaQuery.of(context).size.width - 40,
-                  child: Container(
-                    margin: EdgeInsets.all(10),
-                    child: Table(
-                      border: TableBorder.all(),
-                      columnWidths: {0: FractionColumnWidth(.2), 1: FractionColumnWidth(.8)},
-                      children: [
-                        TableRow( children: [
-                          Column(children:[
-                            Text('Heartrate')
-                          ]),
-                          Column(children:[
-                            Text('no heartrate found'),
-                              //Text(results[DataType.HEART_RATE].getRange(0, 0).toString()),
-                          ]),
-                        ]),
-                        TableRow( children: [
-                          Column(children:[
-                            Text('Step Count')
-                          ]),
-                          Column(children:[
-                            Text(results[DataType.STEP_COUNT].length.toString()),
-                          ]),
-                        ]),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      );
-    });
   }
 }

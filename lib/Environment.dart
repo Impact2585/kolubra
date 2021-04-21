@@ -264,21 +264,21 @@ class _EnvironmentState extends State<Environment> {
                       size: 60, color: Colors.white)),
             ),
             Align(
+              alignment: Alignment.bottomLeft,
+              child: _Triangle(color: Colors.blue[600]),
+            ),
+            Align(
                 alignment: Alignment.bottomLeft,
-                child: Container(
-                    padding: EdgeInsets.all(20),
-                    child: ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all<Color>(
-                              Colors.blue[200]),
-                        ),
-                        child: Icon(
-                          Icons.keyboard_return_outlined,
-                          size: 40,
-                        ),
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        }))),
+                child: TextButton(
+                    style: ButtonStyle(
+                      backgroundColor:
+                          MaterialStateProperty.all<Color>(Colors.transparent),
+                    ),
+                    child:
+                        Icon(Icons.arrow_back, size: 40, color: Colors.white),
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                    })),
           ],
         ));
   }
@@ -321,4 +321,46 @@ class _EnvironmentState extends State<Environment> {
                           image: AssetImage(img), fit: BoxFit.contain))))),
     );
   }
+}
+
+class _Triangle extends StatelessWidget {
+  const _Triangle({
+    Key key,
+    this.color,
+  }) : super(key: key);
+  final Color color;
+  @override
+  Widget build(BuildContext context) {
+    return CustomPaint(
+        painter: _ShapesPainter(color),
+        child: Container(
+            height: 90,
+            width: 150,
+            child: Center(
+                child: Padding(
+                    padding: const EdgeInsets.only(left: 20.0, bottom: 16),
+                    child: Transform.rotate(
+                        angle: pi / 4,
+                        child: Container(
+                            padding: EdgeInsets.all(20),
+                            child: Container()))))));
+  }
+}
+
+class _ShapesPainter extends CustomPainter {
+  final Color color;
+  _ShapesPainter(this.color);
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint();
+    paint.color = color;
+    var path = Path();
+    path.lineTo(0, size.height);
+    path.lineTo(size.width, size.height);
+    path.close();
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

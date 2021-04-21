@@ -67,7 +67,6 @@ class _Achievement extends State<Achievement> {
                         width: 75,
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
-                            border: getBorder(),
                             image: DecorationImage(
                                 image: AssetImage(ach.icon),
                                 fit: BoxFit.cover)),
@@ -110,31 +109,11 @@ class _Achievement extends State<Achievement> {
     ));
   }
 
-  BoxBorder getBorder() {
-    if (ach.achType == 0) {
-      return Border.all(
-        color: Colors.amber[800],
-        width: 4.0,
-      );
-    } else if (ach.achType == 1) {
-      return Border.all(
-        color: Colors.blue[300],
-        width: 4.0,
-      );
-    } else {
-      return Border.all(
-        color: Colors.yellowAccent[400],
-        width: 6.0,
-      );
-    }
-  }
-
   Widget getOptionalText() {
     if (ach.achType == 0) {
       return Row(
         children: <Widget>[
-          new Icon(CupertinoIcons.bolt_circle,
-              color: Colors.orangeAccent, size: 30),
+          new Image.asset("assets/scale.png", width: 30, height: 30),
           Text(
             " " + ach.reward.toString(),
             style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
@@ -148,8 +127,7 @@ class _Achievement extends State<Achievement> {
     } else if (ach.achType == 1) {
       return Row(
         children: <Widget>[
-          new Icon(CupertinoIcons.bolt_circle,
-              color: Colors.orangeAccent, size: 30),
+          new Image.asset("assets/scale.png", width: 30, height: 30),
           Text(
             " " + ach.reward.toString(),
             style: TextStyle(fontSize: 20, color: Colors.limeAccent[400]),
