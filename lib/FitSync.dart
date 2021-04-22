@@ -123,80 +123,84 @@ class _FitSyncState extends State<FitSync> {
       result = 'readAll: $e';
     }
     print(results);
-    setState(() {
-      int stepsDay = 0;
-      int stepsWeek = 0;
-      for (FitData each in results[DataType.STEP_COUNT]) {
-        if (each.dateFrom.day == DateTime.now().day) {
-          stepsDay += each.value;
+    if (results.length == 0) {
+      read();
+    } else {
+      setState(() {
+        int stepsDay = 0;
+        int stepsWeek = 0;
+        for (FitData each in results[DataType.STEP_COUNT]) {
+          if (each.dateFrom.day == DateTime.now().day) {
+            stepsDay += each.value;
+          }
+          stepsWeek += each.value;
         }
-        stepsWeek += each.value;
-      }
-      double distDay = 0;
-      double distWeek = 0;
-      for (FitData each in results[DataType.DISTANCE]) {
-        if (each.dateFrom.day == DateTime.now().day) {
-          distDay += each.value;
+        double distDay = 0;
+        double distWeek = 0;
+        for (FitData each in results[DataType.DISTANCE]) {
+          if (each.dateFrom.day == DateTime.now().day) {
+            distDay += each.value;
+          }
+          distWeek += each.value;
         }
-        distWeek += each.value;
-      }
-      distDay = distDay.round() / 1000;
-      distWeek = distWeek.round() / 1000;
+        distDay = distDay.round() / 1000;
+        distWeek = distWeek.round() / 1000;
 
-      double caloriesDay = 0;
-      double caloriesWeek = 0;
-      for (FitData each in results[DataType.ENERGY]) {
-        if (each.dateFrom.day == DateTime.now().day) {
-          caloriesDay += each.value;
+        double caloriesDay = 0;
+        double caloriesWeek = 0;
+        for (FitData each in results[DataType.ENERGY]) {
+          if (each.dateFrom.day == DateTime.now().day) {
+            caloriesDay += each.value;
+          }
+          caloriesWeek += each.value;
         }
-        caloriesWeek += each.value;
-      }
-      // print(items);
-      while (base.length > 6) {
-        base.removeLast();
-      }
-      base.addAll(<Widget>[
-        Center(
-          child: Text(
-            'Daily Stats',
-            style: TextStyle(color: Colors.black),
-            textScaleFactor: 1.5,
+        // print(items);
+        while (base.length > 6) {
+          base.removeLast();
+        }
+        base.addAll(<Widget>[
+          Center(
+            child: Text(
+              'Daily Stats',
+              style: TextStyle(color: Colors.black),
+              textScaleFactor: 1.5,
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        fitElement(" steps", stepsDay, 5000, 50),
-        SizedBox(height: 10),
-        fitElement(" km", distDay.round(), 5, 30),
-        SizedBox(height: 10),
-        fitElement(" calories", caloriesDay.round(), 2000, 80),
-        SizedBox(height: 10),
-        Center(
-          child: Text(
-            'Weekly Stats',
-            style: TextStyle(color: Colors.black),
-            textScaleFactor: 1.5,
+          SizedBox(height: 10),
+          fitElement(" steps", stepsDay, 5000, 50),
+          SizedBox(height: 10),
+          fitElement(" km", distDay.round(), 5, 30),
+          SizedBox(height: 10),
+          fitElement(" calories", caloriesDay.round(), 2000, 80),
+          SizedBox(height: 10),
+          Center(
+            child: Text(
+              'Weekly Stats',
+              style: TextStyle(color: Colors.black),
+              textScaleFactor: 1.5,
+            ),
           ),
-        ),
-        SizedBox(height: 10),
-        fitElement(" steps", stepsWeek, 35000, 50),
-        SizedBox(height: 10),
-        fitElement(" km", distWeek.round(), 35, 30),
-        SizedBox(height: 10),
-        fitElement(" calories", caloriesWeek.round(), 14000, 80),
-        SizedBox(height: 10),
-        //         // TableRow(children: [
-        //         //   Column(children: [
-        //         //     Text('Heartrate', style: TextStyle(fontSize: 20))
-        //         //   ]),
-        //         //   Column(children: [
-        //         //     // Text('not found'),
-        //         //     Text(results[DataType.HEART_RATE]
-        //         //         .getRange(0, 0)
-        //         //         .toString()),
-        //         //   ]),
-        //         // ]),
-      ]);
-    });
+          SizedBox(height: 10),
+          fitElement(" steps", stepsWeek, 35000, 50),
+          SizedBox(height: 10),
+          fitElement(" km", distWeek.round(), 35, 30),
+          SizedBox(height: 10),
+          fitElement(" calories", caloriesWeek.round(), 14000, 80),
+          SizedBox(height: 10),
+          //         // TableRow(children: [
+          //         //   Column(children: [
+          //         //     Text('Heartrate', style: TextStyle(fontSize: 20))
+          //         //   ]),
+          //         //   Column(children: [
+          //         //     // Text('not found'),
+          //         //     Text(results[DataType.HEART_RATE]
+          //         //         .getRange(0, 0)
+          //         //         .toString()),
+          //         //   ]),
+          //         // ]),
+        ]);
+      });
+    }
   }
 
   Widget fitElement(String category, int value, int max, int min) {
@@ -235,7 +239,9 @@ class _FitSyncState extends State<FitSync> {
 
     if (!mounted) return;
 
-    setState(() {});
+    setState(() {
+      read();
+    });
   }
 
   @override

@@ -134,9 +134,33 @@ class HomeState extends State<Home> {
                     color: Colors.transparent,
                     child: IconButton(
                       splashRadius: 112,
-                      icon: Image.asset('assets/Environments/cave_locked.png'),
+                      icon: Image.asset('assets/Environments/cave.png'),
                       iconSize: 225,
-                      onPressed: () {},
+                      onPressed: () {
+                        Navigator.of(context).push(new Transition(
+                            exitPage: this,
+                            enterPage: new Environment(
+                                <String>['assets/Creatures/Cave/sombrero.png'],
+                                <Creature>[])));
+                      },
+                    ))),
+            Positioned(
+                right: 100,
+                top: 60,
+                child: Material(
+                    color: Colors.transparent,
+                    child: IconButton(
+                      splashRadius: 112,
+                      icon: Image.asset('assets/Environments/tree.png'),
+                      iconSize: 225,
+                      onPressed: () {
+                        Navigator.of(context).push(new Transition(
+                            exitPage: this,
+                            enterPage: new Environment(<String>[
+                              'assets/Creatures/Forest/bowtruckle.png',
+                              'assets/Creatures/Grass/birdster.png'
+                            ], <Creature>[])));
+                      },
                     ))),
             Positioned(
                 right: -20,
@@ -152,19 +176,19 @@ class HomeState extends State<Home> {
                       },
                     ))),
             Positioned(
-                right: 175,
-                top: 150,
+                right: 140,
+                top: 200,
                 child: Material(
                     color: Colors.transparent,
                     child: IconButton(
                       splashRadius: 100,
-                      icon: Image.asset('assets/Environments/tree.png'),
-                      iconSize: 200,
+                      icon: Image.asset('assets/Environments/grass.png'),
+                      iconSize: 250,
                       onPressed: () {
                         Navigator.of(context).push(new Transition(
                             exitPage: this,
                             enterPage: new Environment(
-                                'assets/Creatures/Cave/golem2.png',
+                                <String>['assets/Creatures/Grass/birdster.png'],
                                 <Creature>[])));
                       },
                     ))),

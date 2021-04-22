@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/diagnostics.dart';
+import 'flutter_animation_progress_bar.dart';
 
 // ignore: must_be_immutable
 class Achievement extends StatefulWidget {
@@ -93,14 +94,17 @@ class _Achievement extends State<Achievement> {
               ),
               SizedBox(height: 10),
               new Container(
-                  width: MediaQuery.of(context).size.width - 80,
-                  child: new LinearProgressIndicator(
-                    minHeight: 20,
-                    backgroundColor: Colors.amberAccent,
-                    valueColor:
-                        new AlwaysStoppedAnimation<Color>(Colors.amber[800]),
-                    value: 1.0 * ach.progress / ach.total,
-                  )),
+                width: MediaQuery.of(context).size.width - 80,
+                child: FAProgressBar(
+                  size: 15,
+                  currentValue: ach.progress,
+                  maxValue: ach.total,
+                  changeProgressColor: Colors.amberAccent,
+                  changeColorValue: ach.total,
+                  backgroundColor: Colors.amberAccent,
+                  progressColor: Colors.amber[900],
+                ),
+              ),
             ],
           ),
         ),

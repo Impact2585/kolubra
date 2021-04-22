@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:flutter/cupertino.dart';
 import 'Creature.dart';
+import 'package:confetti/confetti.dart';
 
 class Transition extends PageRouteBuilder {
   final enterPage;
@@ -38,10 +39,11 @@ class Transition extends PageRouteBuilder {
 
 // ignore: must_be_immutable
 class Environment extends StatefulWidget {
-  String backgroundImage;
+  List<String> backgroundImage;
+  String currentHat;
   List<Creature> creatures;
 
-  Environment(String backgroundImage, List<Creature> creatures) {
+  Environment(List<String> backgroundImage, List<Creature> creatures) {
     this.backgroundImage = backgroundImage;
     this.creatures = creatures;
   }
@@ -52,7 +54,11 @@ class Environment extends StatefulWidget {
 }
 
 class _EnvironmentState extends State<Environment> {
-  String backgroundImage;
+  List<String> backgroundImage;
+  int currentBackground;
+  String currentHat = 'assets/transparent.png';
+  ConfettiController _controller;
+
   final List<Tab> myTabs = <Tab>[
     Tab(
       child: Align(
@@ -110,8 +116,45 @@ class _EnvironmentState extends State<Environment> {
 
   Environment ach;
 
-  _EnvironmentState(this.ach, String backgroundImage) {
+  _EnvironmentState(this.ach, List<String> backgroundImage) {
     this.backgroundImage = backgroundImage;
+  }
+
+  @override
+  void initState() {
+    _controller = ConfettiController(duration: const Duration(seconds: 2));
+    currentBackground = 0;
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  Path drawStar(Size size) {
+    // Method to convert degree to radians
+    double degToRad(double deg) => deg * (pi / 180.0);
+
+    const numberOfPoints = 5;
+    final halfWidth = size.width / 2;
+    final externalRadius = halfWidth;
+    final internalRadius = halfWidth / 2.5;
+    final degreesPerStep = degToRad(360 / numberOfPoints);
+    final halfDegreesPerStep = degreesPerStep / 2;
+    final path = Path();
+    final fullAngle = degToRad(360);
+    path.moveTo(size.width, halfWidth);
+
+    for (double step = 0; step < fullAngle; step += degreesPerStep) {
+      path.lineTo(halfWidth + externalRadius * cos(step),
+          halfWidth + externalRadius * sin(step));
+      path.lineTo(halfWidth + internalRadius * cos(step + halfDegreesPerStep),
+          halfWidth + internalRadius * sin(step + halfDegreesPerStep));
+    }
+    path.close();
+    return path;
   }
 
   @override
@@ -164,7 +207,7 @@ class _EnvironmentState extends State<Environment> {
     return Container(
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(backgroundImage),
+            image: AssetImage(backgroundImage[currentBackground]),
             fit: BoxFit.fill,
           ),
         ),
@@ -228,19 +271,19 @@ class _EnvironmentState extends State<Environment> {
                   child: Column(
                     children: <Widget>[
                       Container(
-                        color: Colors.blue,
+                        color: Colors.green,
                         height: 240,
                         child: TabBarView(children: tabs),
                       ),
                       TabBar(
                           labelColor: Colors.white,
-                          unselectedLabelColor: Colors.blue[400],
+                          unselectedLabelColor: Colors.green[400],
                           indicatorSize: TabBarIndicatorSize.label,
                           indicator: BoxDecoration(
                               borderRadius: BorderRadius.only(
                                   bottomLeft: Radius.circular(10),
                                   bottomRight: Radius.circular(10)),
-                              color: Colors.blue),
+                              color: Colors.green),
                           tabs: myTabs),
                     ],
                   ),
@@ -251,7 +294,13 @@ class _EnvironmentState extends State<Environment> {
               left: -10,
               bottom: 150,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      currentBackground--;
+                      if (currentBackground < 0)
+                        currentBackground = backgroundImage.length - 1;
+                    });
+                  },
                   child: Icon(Icons.arrow_back_ios_outlined,
                       size: 60, color: Colors.white)),
             ),
@@ -259,13 +308,19 @@ class _EnvironmentState extends State<Environment> {
               right: -10,
               bottom: 150,
               child: TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    setState(() {
+                      currentBackground++;
+                      if (currentBackground >= backgroundImage.length)
+                        currentBackground = 0;
+                    });
+                  },
                   child: Icon(Icons.arrow_forward_ios_outlined,
                       size: 60, color: Colors.white)),
             ),
             Align(
               alignment: Alignment.bottomLeft,
-              child: _Triangle(color: Colors.blue[600]),
+              child: _Triangle(color: Colors.green[600]),
             ),
             Align(
                 alignment: Alignment.bottomLeft,
@@ -279,6 +334,27 @@ class _EnvironmentState extends State<Environment> {
                     onPressed: () {
                       Navigator.of(context).pop();
                     })),
+            Positioned(
+              bottom: 220,
+              right: 110,
+              child: Image.asset(currentHat, height: 75, width: 75),
+            ),
+            Align(
+              alignment: Alignment.center,
+              child: ConfettiWidget(
+                confettiController: _controller,
+                blastDirectionality: BlastDirectionality
+                    .explosive, // don't specify a direction, blast randomly
+                colors: const [
+                  Colors.green,
+                  Colors.blue,
+                  Colors.pink,
+                  Colors.orange,
+                  Colors.purple
+                ], // manually specify the colors to be used
+                createParticlePath: drawStar, // define a custom shape/path.
+              ),
+            ),
           ],
         ));
   }
@@ -288,10 +364,11 @@ class _EnvironmentState extends State<Environment> {
       color: Colors.transparent,
       child: InkResponse(
           onTap: () {
-            if (img == 'assets/Collectibles/Hats/sombrero.png') {
+            if (img == 'assets/Collectibles/Hats/party_hat.png') {
               setState(() {
-                backgroundImage = 'assets/Creatures/Cave/sombrero.png';
+                currentHat = 'assets/Collectibles/Hats/party_hat.png';
               });
+              _controller.play();
             }
           },
           child: Container(
@@ -301,13 +378,13 @@ class _EnvironmentState extends State<Environment> {
                 borderRadius: BorderRadius.all(Radius.circular(10)),
                 gradient: RadialGradient(
                   colors: <Color>[
-                    Colors.blue[400],
-                    Colors.blue[100],
+                    Colors.green[400],
+                    Colors.green[100],
                   ],
                 ),
-                color: Colors.blue[200],
+                color: Colors.green[200],
                 border: Border.all(
-                  color: Colors.black,
+                  color: Colors.transparent,
                   width: 0.0,
                 ),
               ),

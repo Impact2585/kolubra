@@ -24,6 +24,7 @@ dependencies:
   hovering: ^1.0.4
   fit_kit: ^1.1.2
   shimmer: ^1.1.2
+  confetti: ^0.5.5
   flutter:
     sdk: flutter
     
@@ -60,6 +61,7 @@ flutter:
     - assets/Collectibles/Hats/
     - assets/Creatures/Cave/
     - assets/Creatures/Forest/
+    - assets/Creatures/Grass/
     - assets/Environments/
     - assets/ExerciseIcons/
     - assets/JimmyAssets/
